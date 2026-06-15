@@ -12,6 +12,12 @@
 List every tool your agent will use. For each tool, fill in all four fields.
 You must have at least 3 tools. The three required tools are listed — add any additional tools below them.
 
++++
+Hint: In your own words, write a 2–3 sentence description of what FitFindr needs to do. Include what triggers each tool and what happens when something fails. Add this to the A Complete Interaction section of planning.md — that section has an example query waiting for you to trace through.
++++
+
+
+
 ### Tool 1: search_listings
 
 **What it does:**
@@ -135,6 +141,20 @@ For each tool, describe the specific failure mode you're handling and what the a
 Write out what a full user interaction looks like from start to finish — tool call by tool call. Use a specific example query.
 
 **Example user query:** "I'm looking for a vintage graphic tee under $30. I mostly wear baggy jeans and chunky sneakers. What's out there and how would I style it?"
++++
+Step 1: Parsing the Request & Intent Discovery
+What the Agent Does: The planning loop ingests the raw user prompt. It analyzes the string, extracts the search parameters, and identifies that the user wants to buy something new before styling it.
+
+Tool Called: search_listings
+
+Arguments Extracted from Query:
+
+{
+"description": "vintage graphic tee",
+"size": "M",
+"max_price": 30.0
+}
+*(Note: Since the user didn't specify a size, the agent's planner intelligently infers a default middle size like "M" or checks a profile, or leaves it broad if your mock data allows).*
 
 **Step 1:**
 <!-- What does the agent do first? Which tool is called? With what input? -->
