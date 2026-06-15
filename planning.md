@@ -35,6 +35,15 @@ Hint: In your own words, write a 2–3 sentence description of what FitFindr nee
 **What happens if it fails or returns nothing:**
 <!-- What should the agent do if no listings match? -->
 
++++++
+**search_listings(description: str, size: str, max_price: float) -> list**
+
+Logic: Query the mock data JSON file. Filter by size, budget (max_price), and use basic keyword matching or semantic embedding similarity on description.
+
+Error Handling: If len(results) == 0, return a structured message like {"status": "no_results", "fallback_action": "loosen_filters"}.
+
++++++
+
 ---
 
 ### Tool 2: suggest_outfit
@@ -53,6 +62,15 @@ Hint: In your own words, write a 2–3 sentence description of what FitFindr nee
 **What happens if it fails or returns nothing:**
 <!-- What should the agent do if the wardrobe is empty or no outfit can be suggested? -->
 
++++++
+**suggest_outfit(new_item: dict, wardrobe: list) -> dict**
+
+Logic: Pass the new_item details and the wardrobe array to your LLM (Groq). Ask it to select 2–3 items from the wardrobe that complement the new item.
+
+Error Handling: If wardrobe is empty, the LLM must generate a standalone styling advice guide ("Style this with basics you likely own, like white tees or dark denim") instead of crashing.
+
++++++
+
 ---
 
 ### Tool 3: create_fit_card
@@ -69,6 +87,12 @@ Hint: In your own words, write a 2–3 sentence description of what FitFindr nee
 
 **What happens if it fails or returns nothing:**
 <!-- What should the agent do if the outfit data is incomplete? -->
+
++++++
+**create_fit_card(outfit: dict, new_item: dict) -> str**
+
+Logic: Prompt the LLM to write an engaging, high-energy social media caption (e.g., Instagram/TikTok style). Use a slight temperature variance (e.g., temperature=0.8) to ensure it produces something different every time.
++++++
 
 ---
 
@@ -158,6 +182,11 @@ Arguments Extracted from Query:
 
 **Step 1:**
 <!-- What does the agent do first? Which tool is called? With what input? -->
++++
+- Design Tools & State: agent needs a central memory to store information across the multi-step loop.
+- ...
+- +++
+
 
 **Step 2:**
 <!-- What happens next? What was returned from step 1? What tool is called now? -->
@@ -167,3 +196,14 @@ Arguments Extracted from Query:
 
 **Final output to user:**
 <!-- What does the user actually see at the end? -->
+
++++
+**Step 1: Mock Data & Pure Functions.** Writing python file with search_listings, suggest_outfit, and create_fit_card. Testing them using hardcoded Python inputs to verify they return exactly what expected.
+
+**Step 2: Connect Groq to the Functions.** Building Groq completion wrapper. Ensure the LLM can successfully format arguments for the functions.
+
+**Step 3: Build the Loop.** Tie the functions together inside a while or for loop that tracks the state.
+
+**Step 4: Break things on purpose.** Testing a query like "Find me a neon pink spacesuit under $5". Ensuring that agent doesn't throw a Python IndexError, but instead politely explains it couldn't find a match and offers a fallback alternative.
++++
+
